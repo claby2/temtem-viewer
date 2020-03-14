@@ -44,7 +44,7 @@ function display(){
         if(filtered.includes(n.toLowerCase()) || filtered.includes(t.name)){
             let card = document.createElement("div");
             card.classList.add("listCard");
-            card.onclick = function() { window.open("./temtem/index.html?temtem=" + t.number); };
+            card.onclick = function() { window.location = "./temtem/index.html?temtem=" + t.number; };
             card.target = "_blank";
             let name = document.createElement("h2");
             name.innerText = t.name;
