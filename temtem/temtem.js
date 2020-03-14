@@ -18,6 +18,13 @@ function mapTypes(){
     }).then(()=>{display();});
 }
 
+function createStatBar(value){
+    let fill = document.createElement("div");
+    fill.classList.add("barFill");
+    fill.style.width = (0.83*value) + "%";
+    return fill;
+}
+
 mapTypes();
 
 var first = true;
@@ -31,7 +38,7 @@ function display(){
         let div = document.createElement("div");
     
         let divNext = document.createElement("section");
-    
+
         let portrait = document.createElement("img");
         portrait.src = t.wikiPortraitUrlLarge;
         portrait.classList.add("portrait");
@@ -57,12 +64,54 @@ function display(){
         let description = document.createElement("p");
         description.innerText = t.gameDescription;
         description.classList.add("description");
+
+
+        let stats = document.createElement("div");
+        stats.classList.add("stats");
+
+        let statsLeft = document.createElement("div");
+        let statsRight = document.createElement("div");
+
+        let hp = document.createElement("div");
+        displayStat(t.stats.hp, hp, "HP");
+        
+        let sta = document.createElement("div");
+        displayStat(t.stats.sta, sta, "STA");
+
+        let spd = document.createElement("div");
+        displayStat(t.stats.spd, spd, "SPD");
+
+        let atk = document.createElement("div");
+        displayStat(t.stats.atk, atk, "ATK");
+
+        let total = document.createElement("div");
+        total.innerText = "Total " + t.stats.total;
+
+        let def = document.createElement("div");
+        displayStat(t.stats.def, def, "DEF");
+        let spatk = document.createElement("div");
+        displayStat(t.stats.spatk, spatk, "SPATK");
+        let spdef = document.createElement("div");
+        displayStat(t.stats.spdef, spdef, "SPDEF");
+
+        statsLeft.appendChild(hp);
+        statsLeft.appendChild(sta);
+        statsLeft.appendChild(spd);
+        statsLeft.appendChild(atk);
+        statsLeft.appendChild(total);
+        statsRight.appendChild(def);
+        statsRight.appendChild(spatk);
+        statsRight.appendChild(spdef);
+
+        stats.appendChild(statsLeft);
+        stats.appendChild(statsRight);
     
         div.appendChild(portrait);
         div.appendChild(name);
         div.appendChild(typeDiv);
 
         divNext.appendChild(description);
+        divNext.appendChild(stats);
     
         profile.appendChild(div);
         profile.appendChild(divNext);
@@ -70,4 +119,17 @@ function display(){
     
     
     });
+}
+
+function displayStat(value, div, text){
+    let bar = document.createElement("div");
+    bar.classList.add("bar");
+    let name = document.createElement("p");
+    name.innerText = text;
+    let val = document.createElement("p");
+    val.innerText = value;
+    div.appendChild(name);
+    bar.appendChild(createStatBar(value));
+    div.appendChild(bar);
+    div.appendChild(val)
 }
