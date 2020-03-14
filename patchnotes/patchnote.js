@@ -3,7 +3,7 @@ let patchnote = document.getElementById("patchnotes");
 var first = true;
 
 function getPatchnotes(){
-    if(sessionStorage.length === 0){
+    if(sessionStorage.getItem("res") === null){
         return fetch("https://temtem-api.mael.tech/api/patches")
         .then(data => data.json())
         .then(res =>{
