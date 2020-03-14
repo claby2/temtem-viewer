@@ -23,24 +23,13 @@ function getNamesList(){
     filtered = temtemNames;
 }
 
-function getTemtem(number){
-    return fetch("https://temtem-api.mael.tech/api/temtems/" + number)
-    .then(data => data.json())
-    .then(res => res);
-}
-
-function getTypes(){
-    return fetch("https://temtem-api.mael.tech/api/types")
-    .then(data => data.json())
-    .then(res => res);
-}
-
 function pushTemtems(){
     getAll().then(e=>{
         e.forEach(t=>{
             let info = [];
             info.name = t.name;
             info.wikiPortraitUrlLarge = t.wikiPortraitUrlLarge;
+            info.number = t.number;
             temtems.push(info);
         })
     }).then(()=>{
@@ -55,6 +44,8 @@ function display(){
         if(filtered.includes(n.toLowerCase()) || filtered.includes(t.name)){
             let card = document.createElement("div");
             card.classList.add("listCard");
+            card.onclick = function() { window.open("./temtem/index.html?temtem=" + t.number); };
+            card.target = "_blank";
             let name = document.createElement("h2");
             name.innerText = t.name;
             let portrait = document.createElement("img");
@@ -83,5 +74,4 @@ search.addEventListener("keyup", ()=>{
 })
 
 getNamesList();
-
 pushTemtems();

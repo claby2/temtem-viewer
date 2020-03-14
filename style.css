@@ -97,7 +97,7 @@ body {
     height: 100px;
 }
 
-#patchnotes {
+#patchnotes, #profile {
     margin: 120px 0 0 0;
     padding: 5px 10px 5px 10px;
 }
@@ -139,4 +139,40 @@ body {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+#profile {
+    display: flex;
+    flex-direction: row;
+}
+
+#profile section {
+    padding: 0 0 0 20px;
+}
+
+#profile div div {
+    display: flex;
+    flex-direction: row;
+}
+
+.portrait {
+    width: 200px;
+    height: 200px;
+    border: 2px solid rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+}
+
+.description {
+    font-style: italic;
+}
+
+.temname {
+    margin: 0;
+    font-size: 2em;
+    font-weight: 500;
+}
+
+.typeIcon {
+    width: 80px;
+    height: 80px;
 }
