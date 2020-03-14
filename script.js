@@ -12,25 +12,35 @@ function getAll(){
 }
 
 function getNamesList(){
-    fetch("https://temtem-api.mael.tech/api/temtems")
-    .then(data => data.json())
-    .then(res =>{
-        res.forEach((t)=>{
-            let n = t.name;
-            temtemNames.push(n.toLowerCase());
+    if(sessionStorage.length === 0){
+        return fetch("https://temtem-api.mael.tech/api/temtems")
+        .then(data => data.json())
+        .then(res =>{
+            res.forEach((t)=>{
+                let n = t.name;
+                temtemNames.push(n.toLowerCase());
+            })
+            sessionStorage.setItem("temtemNames", JSON.stringify(temtemNames));
+            filtered = temtemNames;
         })
-    })
-    filtered = temtemNames;
+    } else {
+        return new Promise((resolve, reject) =>{
+            resolve()
+            
+        })
+    }
 }
 
 function pushTemtems(){
     getAll().then(e=>{
         e.forEach(t=>{
-            let info = [];
-            info.name = t.name;
-            info.wikiPortraitUrlLarge = t.wikiPortraitUrlLarge;
-            info.number = t.number;
-            temtems.push(info);
+            let sessionInfo = [];
+
+            sessionInfo.push(t.name);
+            sessionInfo.push(t.wikiPortraitUrlLarge);
+            sessionInfo.push(t.number);
+
+            sessionStorage.setItem(sessionStorage.length-1, JSON.stringify(sessionInfo));
         })
     }).then(()=>{
         display();
@@ -39,23 +49,24 @@ function pushTemtems(){
 
 function display(){
     list.innerText = "";
-    temtems.forEach((t)=>{
-        let n = t.name;
-        if(filtered.includes(n.toLowerCase()) || filtered.includes(t.name)){
+    for(let i = 0; i < sessionStorage.length-1; i++){
+        let t = JSON.parse(sessionStorage.getItem(i));
+        let n = t[0];
+        if(filtered.includes(n.toLowerCase()) || filtered.includes(t[0])){
+            console.log("test");
             let card = document.createElement("div");
             card.classList.add("listCard");
-            card.onclick = function() { window.location = "./temtem/index.html?temtem=" + t.number; };
+            card.onclick = function() { window.location = "./temtem/index.html?temtem=" + t[2]; };
             card.target = "_blank";
             let name = document.createElement("h2");
-            name.innerText = t.name;
+            name.innerText = t[0];
             let portrait = document.createElement("img");
-            portrait.src = t.wikiPortraitUrlLarge;
+            portrait.src = t[1];
             card.appendChild(name);
             card.appendChild(portrait);
             list.appendChild(card);
         }
-
-    })
+    }
 }
 
 search.addEventListener("keyup", ()=>{
@@ -73,5 +84,14 @@ search.addEventListener("keyup", ()=>{
     display();
 })
 
-getNamesList();
-pushTemtems();
+getNamesList().then(()=>{
+    if(sessionStorage.length < 2){
+        pushTemtems();
+        console.log(temtems);
+    } else {
+        temtemNames = JSON.parse(sessionStorage.getItem("temtemNames"));
+        filtered = temtemNames;
+        console.log(sessionStorage);
+        display();
+    }
+});

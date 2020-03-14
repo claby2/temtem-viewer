@@ -1,21 +1,39 @@
+params = new URLSearchParams(location.search);
+id  = params.get("temtem");
+
 let profile = document.getElementById("profile");
 
 function getTemtem(number){
-    return fetch("https://temtem-api.mael.tech/api/temtems/" + number)
-    .then(data => data.json())
-    .then(res => res);
+    if(sessionStorage.getItem("res"+id) === null){
+        return fetch("https://temtem-api.mael.tech/api/temtems/" + number)
+        .then(data => data.json())
+        .then(res =>{
+            sessionStorage.setItem("res" + id, JSON.stringify(res));
+            return res;
+        });
+    } else {
+        return new Promise((resolve, reject) =>{
+            resolve(JSON.parse(sessionStorage.getItem("res"+id)));
+        })
+    }
 }
 
-var types = [];
+types = {};
 
 function mapTypes(){
-    fetch("https://temtem-api.mael.tech/api/types")
-    .then(data => data.json())
-    .then(res =>{
-        res.forEach(e=>{
-            types[e.name] = e.icon;  
-        })
-    }).then(()=>{display();});
+    if(sessionStorage.getItem("types"+id) === null){
+        fetch("https://temtem-api.mael.tech/api/types")
+        .then(data => data.json())
+        .then(res =>{
+            res.forEach(e=>{
+                types[e.name] = e.icon;  
+            })
+            sessionStorage.setItem("types" + id, JSON.stringify(types));
+        }).then(()=>{display();});
+    } else {
+        types = JSON.parse(sessionStorage.getItem("types"+id));
+        display();
+    }
 }
 
 function createStatBar(value){
@@ -29,10 +47,8 @@ mapTypes();
 
 var first = true;
 
-let params = new URLSearchParams(location.search);
-let id  = params.get("temtem");
-
 function display(){
+    console.log(types);
     getTemtem(id).then(t=>{
 
         let div = document.createElement("div");
@@ -133,3 +149,4 @@ function displayStat(value, div, text){
     div.appendChild(bar);
     div.appendChild(val)
 }
+
