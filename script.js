@@ -16,7 +16,8 @@ function getNamesList(){
     .then(data => data.json())
     .then(res =>{
         res.forEach((t)=>{
-            temtemNames.push(t.name);
+            let n = t.name;
+            temtemNames.push(n.toLowerCase());
         })
     })
     filtered = temtemNames;
@@ -50,7 +51,8 @@ function pushTemtems(){
 function display(){
     list.innerText = "";
     temtems.forEach((t)=>{
-        if(filtered.includes(t.name)){
+        let n = t.name;
+        if(filtered.includes(n.toLowerCase()) || filtered.includes(t.name)){
             let card = document.createElement("div");
             card.classList.add("listCard");
             let name = document.createElement("h2");
@@ -67,6 +69,7 @@ function display(){
 
 search.addEventListener("keyup", ()=>{
     let input = search.value;
+    input = input.toLowerCase()
     if(input === ""){
         getAll();
         filtered = temtemNames;
